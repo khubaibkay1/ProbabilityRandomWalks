@@ -2,9 +2,13 @@ import numpy as np
 import subprocess
 import matplotlib.pyplot as plt
 
-angles=[(np.pi,0.5),(0.5*np.pi,0.2),(0,0.3)]
+
+#Tuples Showing (value,probability)
+angles=[(np.pi,1/3),(0.5*np.pi,1/3),(0,1/3)]
 r=[(0,1/3),(0.5,1/3),(1,1/3)]
 steps=10000
+
+#File writing
 with open("angleprobabilities.txt","w") as f:
     with open("anglevalues.txt","w") as f2:
         for i,values in enumerate(angles):
@@ -27,7 +31,7 @@ with open("rprobabilities.txt","w") as f:
                 f.write(str(values[1])+"\n")
 with open("steps.txt","w") as f:
     f.write(str(steps))
-    
+  
 subprocess.call("task3.exe",shell=True)
 data=open("task3data.txt","r").readlines()
 a=np.array([[float(i) for i in coord.strip().split(",")] for coord in data])

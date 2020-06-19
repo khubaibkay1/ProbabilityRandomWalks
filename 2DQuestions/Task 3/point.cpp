@@ -3,6 +3,7 @@
 #include <stdlib.h> /* srand, rand */
 #include <time.h>
 #include <cmath>
+#include <math.h> 
 // #include <fstream>
 #include <random>
 #include <string>
@@ -12,6 +13,7 @@
 const long double PI = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798;
 void point::move()
 {
+    // To understand this please refer to README file
     long double valx = x;
 
     long double valy = y;
@@ -28,26 +30,49 @@ void point::move()
         return;
     }
     while (true)
-    {
-        long double gradient = (oldy - newy) / (oldx - newx);
-        long double c = newy - gradient * newx;
-        long double aquadratic = 1 + std::pow(gradient, 2);
-        long double bquadratic = 2 * gradient * c;
-        long double cquadratic = std::pow(c, 2) - 10000;
-        long double squarerootpart = std::pow(bquadratic, 2) - 4 * aquadratic * cquadratic;
-        if (squarerootpart < 0)
-        {
-            std::cout << "poop";
-            return;
-        }
-
-        squarerootpart = std::sqrt(squarerootpart);
-        long double x1 = (-bquadratic + squarerootpart) / (2 * aquadratic);
-        long double x2 = (-bquadratic - squarerootpart) / (2 * aquadratic);
-        long double y1 = x1 * gradient * c;
-        long double y2 = x2 * gradient * c;
+    {   
         long double xintersect;
         long double yintersect;
+        long double x1;
+        long double x2;
+        long double y1;
+        long double y2;
+        long double gradient = (oldy - newy) / (oldx - newx);
+        if (isinf(gradient) ) // vertical line.
+        { 
+            
+            x1 = newx;
+            x2 = newx;
+            y1 = std::sqrt(-std::pow(x1,2)+10000);
+            y2 = -std::sqrt(-std::pow(x2,2)+10000);
+           
+        }
+
+        else if (gradient ==0) // horizontal line 
+        {
+           
+            y1 = newy;
+            y2 = newy;
+            x1 = std::sqrt(-std::pow(y1,2)+10000);
+            x2 = -std::sqrt(-std::pow(y2,2)+10000);
+        }
+        else
+        {
+            long double c = newy - gradient * newx;
+            long double aquadratic = 1 + std::pow(gradient, 2);
+            long double bquadratic = 2 * gradient * c;
+            long double cquadratic = std::pow(c, 2) - 10000;
+            long double squarerootpart = std::pow(bquadratic, 2) - 4 * aquadratic * cquadratic;
+
+            squarerootpart = std::sqrt(squarerootpart);
+            x1 = (-bquadratic + squarerootpart) / (2 * aquadratic);
+            x2 = (-bquadratic - squarerootpart) / (2 * aquadratic);
+            y1 = x1 * gradient * c;
+            y2 = x2 * gradient * c;
+        }
+        
+       
+       
         if (std::pow(x1 - valx, 2) + std::pow(y1 - valy, 2) < std::pow(x2 - valx, 2) + std::pow(y2 - valy, 2))
         {
             xintersect = x1;
@@ -73,12 +98,10 @@ void point::move()
         long double reflect_dist = std::sqrt(std::pow(oldx - xintersect, 2) + std::pow(oldy - yintersect, 2));
         valx = ((reflect_x / reflect_vect_mag) * (r - reflect_dist)) / (xintersect);
         valy = ((reflect_y / reflect_vect_mag) * (r - reflect_dist)) / (yintersect);
-        // std::cout << "hello\n";
         if (std::pow(valx, 2) + std::pow(valy, 2) > 10000)
         {
             newx = valx;
             newy = valy;
-            // std::cout << "hello";
         }
         else
         {
@@ -95,9 +118,9 @@ point::point(long double x, long double y) : x(x), y(y)
  {
         std::ifstream source("angleprobabilities.txt");
 
-        for (std::string line; std::getline(source, line);) //read stream line by line
+        for (std::string line; std::getline(source, line);) 
         {
-            std::istringstream in(line); //make a stream for the line itself
+            std::istringstream in(line); 
             float x;
             in >> x;
             validangleprob.push_back(x);
@@ -107,9 +130,9 @@ point::point(long double x, long double y) : x(x), y(y)
     {
         std::ifstream source("anglevalues.txt");
 
-        for (std::string line; std::getline(source, line);) //read stream line by line
+        for (std::string line; std::getline(source, line);) 
         {
-            std::istringstream in(line); //make a stream for the line itself
+            std::istringstream in(line); 
             float x;
             in >> x;
             validangle.push_back(x);
@@ -119,9 +142,9 @@ point::point(long double x, long double y) : x(x), y(y)
  {
         std::ifstream source("rprobabilities.txt");
 
-        for (std::string line; std::getline(source, line);) //read stream line by line
+        for (std::string line; std::getline(source, line);) 
         {
-            std::istringstream in(line); //make a stream for the line itself
+            std::istringstream in(line); 
             float x;
             in >> x;
             validrprob.push_back(x);
@@ -131,9 +154,9 @@ point::point(long double x, long double y) : x(x), y(y)
     {
         std::ifstream source("rvalues.txt");
 
-        for (std::string line; std::getline(source, line);) //read stream line by line
+        for (std::string line; std::getline(source, line);) 
         {
-            std::istringstream in(line); //make a stream for the line itself
+            std::istringstream in(line); 
             float x;
             in >> x;
             validr.push_back(x);
@@ -148,60 +171,7 @@ point::point(long double x, long double y) : x(x), y(y)
 
 point::~point()
 {
-    // delete rmover;
-
-    // delete generator;
-
-    // delete angledecider;
 }
-// point::point(std::default_random_engine &generator)
-// {
-//     {
-//         std::ifstream source("angleprobabilities.txt");
-
-//         for (std::string line; std::getline(source, line);) //read stream line by line
-//         {
-//             std::istringstream in(line); //make a stream for the line itself
-//             float x;
-//             in >> x;
-//             validangleprob.push_back(x);
-//         }
-//     }
-//     rmover = new std::discrete_distribution<int>(validangleprob.begin(), validangleprob.end());
-//     {
-//         std::ifstream source("anglevalues.txt");
-
-//         for (std::string line; std::getline(source, line);) //read stream line by line
-//         {
-//             std::istringstream in(line); //make a stream for the line itself
-//             float x;
-//             in >> x;
-//             validangle.push_back(x);
-//         }
-//     }
-//     {
-//         std::ifstream source("anglevalues.txt");
-
-//         for (std::string line; std::getline(source, line);) //read stream line by line
-//         {
-//             std::istringstream in(line); //make a stream for the line itself
-//             float x;
-//             in >> x;
-//             validangle.push_back(x);
-//         }
-//     }
-//     rmover = new std::uniform_real_distribution<long double>(0, 1);
-//     angledecider = new std::uniform_real_distribution<long double>(0, 2 * PI);
-
-//     std::uniform_real_distribution<long double> distribution(0.0, 100);
-//     long double radius = distribution(generator);
-//     // generator2.seed(time(NULL));
-//     // std::uniform_real_distribution<long double> distribution2(0.0,2*PI);
-//     long double angle = (*angledecider)(generator);
-//     x = radius * std::cos(angle);
-//     y = radius * std::sin(angle);
-//     this->generator = new std::default_random_engine(rand());
-// }
 
 std::string point::printdata()
 {
