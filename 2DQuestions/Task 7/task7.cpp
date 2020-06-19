@@ -8,7 +8,7 @@
 #include <string>
 #include "point.hpp"
 // #include "twopointmeet.hpp"
-// g++ point.cpp task5.cpp -o task5.exe
+// g++ point.cpp task7.cpp -o task7.exe
 // #include <math.h>
 int main()
 {

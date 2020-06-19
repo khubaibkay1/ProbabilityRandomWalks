@@ -20,7 +20,7 @@ with open("steps.txt","w") as f:
     f.write(str(steps))
     
 subprocess.call("task7.exe",shell=True)
-data=open("task3data.txt","r").readlines()
+data=open("task7data.txt","r").readlines()
 a=np.array([[float(i) for i in coord.strip().split(",")] for coord in data])
 # print(a)
 plt.style.use("ggplot")
