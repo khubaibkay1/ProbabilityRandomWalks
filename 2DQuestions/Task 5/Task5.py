@@ -2,6 +2,7 @@ import numpy as np
 import subprocess
 import matplotlib.pyplot as plt
 
+#Write steps you want to run the simulation for
 steps=10000
 with open("steps.txt","w") as f:
     f.write(str(steps))
