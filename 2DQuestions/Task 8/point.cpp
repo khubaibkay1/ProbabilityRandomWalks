@@ -33,12 +33,7 @@ void point::move()
         long double bquadratic = 2 * gradient * c;
         long double cquadratic = std::pow(c, 2) - 10000;
         long double squarerootpart = std::pow(bquadratic, 2) - 4 * aquadratic * cquadratic;
-        if (squarerootpart < 0)
-        {
-            std::cout << "poop";
-            return;
-        }
-
+ 
         squarerootpart = std::sqrt(squarerootpart);
         long double x1 = (-bquadratic + squarerootpart) / (2 * aquadratic);
         long double x2 = (-bquadratic - squarerootpart) / (2 * aquadratic);
@@ -71,12 +66,10 @@ void point::move()
         long double reflect_dist = std::sqrt(std::pow(oldx - xintersect, 2) + std::pow(oldy - yintersect, 2));
         valx = ((reflect_x / reflect_vect_mag) * (r - reflect_dist)) / (xintersect);
         valy = ((reflect_y / reflect_vect_mag) * (r - reflect_dist)) / (yintersect);
-        // std::cout << "hello\n";
         if (std::pow(valx, 2) + std::pow(valy, 2) > 10000)
         {
             newx = valx;
             newy = valy;
-            // std::cout << "hello"; 
         }
         else
         {
@@ -91,17 +84,12 @@ point::point(long double x, long double y) : x(x), y(y)
     rmover = new std::uniform_real_distribution<long double>(0, 1);
     generator = new std::default_random_engine(rand());
     angledecider = new std::uniform_real_distribution<long double>(0, 2 * PI);
-    // std::uniform_real_distribution<long double> x(0,1);
-    // rmover=x;
+ 
 }
 
 point::~point()
 {
-    // delete rmover;
-
-    // delete generator;
-
-    // delete angledecider;
+ 
 }
 point::point(std::default_random_engine &generator)
 {
@@ -111,8 +99,6 @@ point::point(std::default_random_engine &generator)
     
     std::uniform_real_distribution<long double> distribution(0.0, 100);
     long double radius = distribution(generator);
-    // generator2.seed(time(NULL));
-    // std::uniform_real_distribution<long double> distribution2(0.0,2*PI);
     long double angle = (*angledecider)(generator);
     x = radius * std::cos(angle);
     y = radius * std::sin(angle);
