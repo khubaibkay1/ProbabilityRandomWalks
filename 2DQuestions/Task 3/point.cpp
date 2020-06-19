@@ -3,7 +3,7 @@
 #include <stdlib.h> /* srand, rand */
 #include <time.h>
 #include <cmath>
-#include <math.h> 
+#include <math.h>
 // #include <fstream>
 #include <random>
 #include <string>
@@ -12,8 +12,8 @@
 #include "point.hpp"
 const long double PI = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798;
 void point::move()
-{
-    // To understand this please refer to README file
+{ 
+    
     long double valx = x;
 
     long double valy = y;
@@ -30,7 +30,9 @@ void point::move()
         return;
     }
     while (true)
-    {   
+    {
+        //find point of intersection with circle
+
         long double xintersect;
         long double yintersect;
         long double x1;
@@ -38,23 +40,22 @@ void point::move()
         long double y1;
         long double y2;
         long double gradient = (oldy - newy) / (oldx - newx);
-        if (isinf(gradient) ) // vertical line.
-        { 
-            
+        if (isinf(gradient)) // vertical line.
+        {
+
             x1 = newx;
             x2 = newx;
-            y1 = std::sqrt(-std::pow(x1,2)+10000);
-            y2 = -std::sqrt(-std::pow(x2,2)+10000);
-           
+            y1 = std::sqrt(-std::pow(x1, 2) + 10000);
+            y2 = -std::sqrt(-std::pow(x2, 2) + 10000);
         }
 
-        else if (gradient ==0) // horizontal line 
+        else if (gradient == 0) // horizontal line
         {
-           
+
             y1 = newy;
             y2 = newy;
-            x1 = std::sqrt(-std::pow(y1,2)+10000);
-            x2 = -std::sqrt(-std::pow(y2,2)+10000);
+            x1 = std::sqrt(-std::pow(y1, 2) + 10000);
+            x2 = -std::sqrt(-std::pow(y2, 2) + 10000);
         }
         else
         {
@@ -70,9 +71,7 @@ void point::move()
             y1 = x1 * gradient * c;
             y2 = x2 * gradient * c;
         }
-        
-       
-       
+
         if (std::pow(x1 - valx, 2) + std::pow(y1 - valy, 2) < std::pow(x2 - valx, 2) + std::pow(y2 - valy, 2))
         {
             xintersect = x1;
@@ -83,19 +82,26 @@ void point::move()
             xintersect = x2;
             yintersect = y2;
         }
+        
+        // Gradient of the Normal  at the intersect
         long double g_normal = yintersect / xintersect;
         long double a_norm = -g_normal;
         long double b_norm = 1;
         long double n_vector_mag = std::sqrt(std::pow(a_norm, 2) + b_norm);
+        
+        // Perpendicular dist from Old point to the normal
         long double perp_dist = (std::abs(a_norm * x + b_norm * y) * 2) / n_vector_mag;
         long double n_norm_a = a_norm / n_vector_mag;
         long double n_norm_b = b_norm / n_vector_mag;
         valx = n_norm_a * perp_dist + oldx;
         valy = n_norm_b * perp_dist + oldy;
+        
+        // Vector from intersection pt to the reflected pt
         long double reflect_x = valx - xintersect;
         long double reflect_y = valy - yintersect;
         long double reflect_vect_mag = std::sqrt(std::pow(reflect_x, 2) + std::pow(reflect_y, 2));
         long double reflect_dist = std::sqrt(std::pow(oldx - xintersect, 2) + std::pow(oldy - yintersect, 2));
+        // Reflected point
         valx = ((reflect_x / reflect_vect_mag) * (r - reflect_dist)) / (xintersect);
         valy = ((reflect_y / reflect_vect_mag) * (r - reflect_dist)) / (yintersect);
         if (std::pow(valx, 2) + std::pow(valy, 2) > 10000)
@@ -115,12 +121,12 @@ point::point(long double x, long double y) : x(x), y(y)
 {
 
     // Get angle Probabilities
- {
+    {
         std::ifstream source("angleprobabilities.txt");
 
-        for (std::string line; std::getline(source, line);) 
+        for (std::string line; std::getline(source, line);)
         {
-            std::istringstream in(line); 
+            std::istringstream in(line);
             float x;
             in >> x;
             validangleprob.push_back(x);
@@ -130,21 +136,21 @@ point::point(long double x, long double y) : x(x), y(y)
     {
         std::ifstream source("anglevalues.txt");
 
-        for (std::string line; std::getline(source, line);) 
+        for (std::string line; std::getline(source, line);)
         {
-            std::istringstream in(line); 
+            std::istringstream in(line);
             float x;
             in >> x;
             validangle.push_back(x);
         }
     }
     // Get r Probabilities
- {
+    {
         std::ifstream source("rprobabilities.txt");
 
-        for (std::string line; std::getline(source, line);) 
+        for (std::string line; std::getline(source, line);)
         {
-            std::istringstream in(line); 
+            std::istringstream in(line);
             float x;
             in >> x;
             validrprob.push_back(x);
@@ -154,16 +160,15 @@ point::point(long double x, long double y) : x(x), y(y)
     {
         std::ifstream source("rvalues.txt");
 
-        for (std::string line; std::getline(source, line);) 
+        for (std::string line; std::getline(source, line);)
         {
-            std::istringstream in(line); 
+            std::istringstream in(line);
             float x;
             in >> x;
             validr.push_back(x);
         }
     }
-   
-   
+
     generator = new std::default_random_engine(rand());
     // std::uniform_real_distribution<long double> x(0,1);
     // rmover=x;

@@ -10,7 +10,6 @@
 const long double PI = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798;
 void point::move()
 {
-    // Look at README for description of this algorithm
     long double valx = x;
 
     long double valy = y;
@@ -28,6 +27,7 @@ void point::move()
     }
     while (true)
     {
+        //find point of intersection with circle
         long double gradient = (oldy - newy) / (oldx - newx);
         long double c = newy - gradient * newx;
         long double aquadratic = 1 + std::pow(gradient, 2);
@@ -53,19 +53,26 @@ void point::move()
             xintersect = x2;
             yintersect = y2;
         }
+        // Gradient of the Normal  at the intersect
+        
         long double g_normal = yintersect / xintersect;
         long double a_norm = -g_normal;
         long double b_norm = 1;
         long double n_vector_mag = std::sqrt(std::pow(a_norm, 2) + b_norm);
+        // Perpendicular dist from Old point to the normal
+        
         long double perp_dist = (std::abs(a_norm * x + b_norm * y) * 2) / n_vector_mag;
         long double n_norm_a = a_norm / n_vector_mag;
         long double n_norm_b = b_norm / n_vector_mag;
         valx = n_norm_a * perp_dist + oldx;
         valy = n_norm_b * perp_dist + oldy;
+        // Vector from intersection pt to the reflected pt
+        
         long double reflect_x = valx - xintersect;
         long double reflect_y = valy - yintersect;
         long double reflect_vect_mag = std::sqrt(std::pow(reflect_x, 2) + std::pow(reflect_y, 2));
         long double reflect_dist = std::sqrt(std::pow(oldx - xintersect, 2) + std::pow(oldy - yintersect, 2));
+        // Reflected point
         valx = ((reflect_x / reflect_vect_mag) * (r - reflect_dist)) / (xintersect);
         valy = ((reflect_y / reflect_vect_mag) * (r - reflect_dist)) / (yintersect);
         
